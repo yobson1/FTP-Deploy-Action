@@ -2004,6 +2004,7 @@ function createFolder(client, folderPath, logger, timings, dryRun) {
 function removeFolder(client, folderPath, logger, dryRun) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        var error;
         logger.all(`removing folder "${folderPath + "/"}"`);
         const path = getFileBreadcrumbs(folderPath + "/");
         if (path.folders === null) {
@@ -2017,7 +2018,7 @@ function removeFolder(client, folderPath, logger, dryRun) {
                 }
             }
             catch (e) {
-                let error = e;
+                error = e;
                 if (error.code === types_1.ErrorCode.FileNotFoundOrNoAccess) {
                     logger.verbose(`  could not remove folder. It doesn't exist!`);
                 }
@@ -2028,7 +2029,9 @@ function removeFolder(client, folderPath, logger, dryRun) {
             }
         }
         // navigate back to the root folder
-        yield upDir(client, logger, (_a = path.folders) === null || _a === void 0 ? void 0 : _a.length);
+        if (error != null) {
+            yield upDir(client, logger, (_a = path.folders) === null || _a === void 0 ? void 0 : _a.length);
+        }
         logger.verbose(`  completed`);
     });
 }
@@ -3137,7 +3140,9 @@ class Client {
             await this.cd(remoteDirPath);
             await this.clearWorkingDir();
             if (remoteDirPath !== "/") {
-                await this.cdup();
+                for (let i = 0; i < (remoteDirPath.match(/\//g) || []).length; i++) {
+                    await this.cdup();
+                }
                 await this.removeEmptyDir(remoteDirPath);
             }
         });
@@ -6756,7 +6761,7 @@ module.exports = require("util");
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -6769,7 +6774,7 @@ module.exports = require("util");
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -6778,14 +6783,14 @@ module.exports = require("util");
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
-/******/ 	
+/******/
 /******/ 	__webpack_require__.ab = __dirname + "/";/************************************************************************/
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
