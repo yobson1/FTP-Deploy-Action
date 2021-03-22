@@ -2029,7 +2029,7 @@ function removeFolder(client, folderPath, logger, dryRun) {
             }
         }
         // navigate back to the root folder
-        if (error != null) {
+        if (error == null) {
             yield upDir(client, logger, (_a = path.folders) === null || _a === void 0 ? void 0 : _a.length);
         }
         logger.verbose(`  completed`);
