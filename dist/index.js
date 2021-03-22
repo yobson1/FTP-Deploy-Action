@@ -2028,10 +2028,10 @@ function removeFolder(client, folderPath, logger, dryRun) {
                 }
             }
         }
-        // navigate back to the root folder
-        if (error == null) {
-            yield upDir(client, logger, (_a = path.folders) === null || _a === void 0 ? void 0 : _a.length);
-        }
+        // navigate back to the root folder - we should already be back to where we started at this point
+        // if (error == null) {
+        //     yield upDir(client, logger, (_a = path.folders) === null || _a === void 0 ? void 0 : _a.length);
+        // }
         logger.verbose(`  completed`);
     });
 }
